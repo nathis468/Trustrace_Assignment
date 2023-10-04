@@ -21,7 +21,7 @@ CREATE TABLE Room(
 
 CREATE TABLE Exams(
 		ExamId INT PRIMARY KEY,
-		Time TIME,
+		Time DATETIME,
 		RoomNo INT,
 		FOREIGN KEY (RoomNo) REFERENCES Room(RoomNo)
 );	
