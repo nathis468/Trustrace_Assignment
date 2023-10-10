@@ -1,0 +1,176 @@
+import java.util.Scanner;
+import java.util.HashMap;
+
+interface Game{
+    void hit();
+    void stay();
+    void dealer();
+    void choice();
+    void decision();
+    void compare();
+    void initial();
+}
+
+
+class Child implements Game{
+    int turn=1;
+    int player_sum=0;
+    int dealer_sum=0;
+    String hit="hit";
+    String stay="stay";
+    int flag=0;
+    int dealer_2;
+    
+    HashMap<Integer,Integer> hm=new HashMap<>();
+
+    public void hit(){
+        if(this.turn==1){
+            int temp=(int)(Math.random()*(11-2)+2);
+
+            // Time complexity -  O(1)
+
+            if(hm.get(temp)==0){
+                while(hm.get(temp)==0){
+                    temp=(int)(Math.random()*(11-2)+2);
+                }
+            }
+            else{
+                hm.put(temp,hm.get(temp)-1);
+            }
+
+            this.player_sum+=temp;
+            System.out.println("You drew a "+temp+"\nYour total is "+this.player_sum);
+        }
+        else{
+            int temp2=(int)(Math.random()*(11-2)+2);
+
+            // Time complexity -  O(1)
+
+            if(hm.get(temp2)==0){
+                while(hm.get(temp2)==0){
+                    temp2=(int)(Math.random()*(11-2)+2);
+                }
+            }
+            else{
+                hm.put(temp2,hm.get(temp2)-1);
+            }
+            
+            this.dealer_sum+=temp2;
+            System.out.println("He drew a "+temp2+"\nHis total is "+this.dealer_sum);
+        }
+        decision();
+    }
+    public void stay(){
+        if(turn==2){
+            turn=1;
+            System.out.println("Dealers total is "+this.dealer_sum);
+            System.out.println("Dealers turn completed");
+            decision();
+            compare();
+            choice();
+        }
+        else if(turn==1){
+            turn=2;
+            dealer();
+        }
+    }
+    public void dealer(){
+        if(flag==0){
+            System.out.println("His hidden card was a "+this.dealer_2);
+            System.out.println("His total was "+this.dealer_sum);
+            flag=1;
+        }
+        this.turn=2;           
+        int ran=(int)(Math.random()*10)+1;
+        while(ran>5){
+            System.out.println("Dealer chooses to hit");
+            hit();
+        }
+        if(ran>5){
+            System.out.println("Dealer chooses to stay");
+            stay();
+        }
+    }
+    public void choice(){
+        Scanner sc=new Scanner(System.in);
+        while(dealer_sum<16 && player_sum<21){
+            System.out.println("Do you want to stay or hit");
+            String choice=sc.nextLine();
+            String choice1="hit";
+            String choice2="stay";
+            int flag1=0;
+            for(int i=0;i<choice.length();i++){
+                if(choice.charAt(i)==choice2.charAt(i)){
+                    flag1=1;
+                    break;
+                }
+            }
+            if(flag1==0){
+                hit();
+            }
+            else if(flag1==1){
+                stay();
+            }
+        }
+    }
+    public void decision(){
+        if(dealer_sum>16){
+            System.out.println("\nYou Won the match!");
+            System.exit(player_sum);
+        }
+        else if(player_sum>21){
+            System.out.println("\nDealer Won the match!");
+            System.exit(dealer_sum);
+        }
+    }
+    public void compare(){
+        if(this.dealer_sum>this.player_sum){
+            System.out.println("\nDealer Won the match!");
+            System.exit(dealer_sum);
+        }
+    }
+    public void initial(){
+
+        // Space Complexity - O(n)
+
+        hm.put(2,4);
+        hm.put(3,4);
+        hm.put(4,4);
+        hm.put(5,4);
+        hm.put(6,4);
+        hm.put(7,4);
+        hm.put(8,4);
+        hm.put(9,4);
+        hm.put(10,16);
+        hm.put(11,4);
+        System.out.println("Welcome to BlackJack program!");
+        int player_1=(int)(Math.random()*(11-2))+1;
+        int player_2=(int)(Math.random()*(11-2))+1;
+
+        // Time complexity -  O(1)
+
+        hm.put(player_1,hm.get(player_1)-1);
+        hm.put(player_2,hm.get(player_1)-1);
+
+        this.player_sum=player_1+player_2;
+        System.out.println("You get a "+player_1+" and a "+player_2+"\nYour total is "+this.player_sum);
+        int dealer_1=(int)(Math.random()*(11-2))+1;
+        this.dealer_2=(int)(Math.random()*(11-2))+1;
+
+        // Time complexity -  O(1)
+
+        hm.put(dealer_1,hm.get(dealer_1)-1);
+        hm.put(dealer_2,hm.get(dealer_1)-1);
+
+        this.dealer_sum=dealer_1+this.dealer_2;
+        System.out.println("The dealer has a "+dealer_1+" showing, and a hidden card. \nHis total is hidden, too.");
+    }
+}
+
+class BlackJackUsingInterfaceAndMap{
+    public static void main(String args[]){
+        Child c=new Child();
+        c.initial();
+        c.choice();
+    }
+}

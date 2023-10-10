@@ -1,0 +1,4 @@
+1) create 2 branches - main1 & main2
+2) Do different changes in main1 and push it to main
+3) Do different changes in main2 and commit and pull from main
+4) Resolve the merge conflict
